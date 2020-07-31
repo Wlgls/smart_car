@@ -13,12 +13,12 @@
 暂未实现调速
 基于不同的连线，函数可能发生变换，如前进变为后退等
 具体连线为（BCM）:
-ENA:GPIO-26
+ENA:GPIO-13
 IN1:GPIO-19
-IN2:GPIO-13
-ENB:GPIO-16
+IN2:GPIO-26
+ENB:GPIO-21
 IN3:GPIO-20
-IN4:GPIO-21
+IN4:GPIO-16
 """
 
 
@@ -31,12 +31,12 @@ GPIO.setmode(GPIO.BCM)
 class Car(object):
 
     def __init__(self):
-        self.ENA=26
+        self.ENA=13
         self.IN1=19
-        self.IN2=13
-        self.ENB=16
+        self.IN2=26
+        self.ENB=21
         self.IN3=20
-        self.IN4=21
+        self.IN4=16
         GPIO.setup(self.ENA, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN1, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN2, GPIO.OUT, initial=GPIO.LOW)
