@@ -6,8 +6,8 @@
 * IN1:GPIO-19
 * IN2:GPIO-26
 * ENB:GPIO-21
-* IN3:GPIO-20
-* IN4:GPIO-16
+* IN3:GPIO-16
+* IN4:GPIO-20
 
 #### infrared
 

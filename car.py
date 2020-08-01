@@ -17,8 +17,8 @@ ENA:GPIO-13
 IN1:GPIO-19
 IN2:GPIO-26
 ENB:GPIO-21
-IN3:GPIO-20
-IN4:GPIO-16
+IN3:GPIO-16
+IN4:GPIO-20
 """
 
 
@@ -35,8 +35,8 @@ class Car(object):
         self.IN1=19
         self.IN2=26
         self.ENB=21
-        self.IN3=20
-        self.IN4=16
+        self.IN3=16
+        self.IN4=20
         GPIO.setup(self.ENA, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN1, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN2, GPIO.OUT, initial=GPIO.LOW)
