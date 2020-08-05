@@ -20,11 +20,11 @@ class SteeringEng(object):
         self.signal = 12
         GPIO.setup(self.signal, GPIO.OUT)
         self.inlt = GPIO.PWM(self.signal, 50)
+        self.inlt.start(0)
 
     def rotate(self, angel):
-        self.inlt.start(0)
         self.inlt.ChangeDutyCycle(2)
-        time.sleep(0.5*angel/180)
+        time.sleep(0.3*angel/180)
         self.inlt.ChangeDutyCycle(0)
 
     def cleanup(self):
@@ -33,6 +33,6 @@ class SteeringEng(object):
 
 if __name__ == "__main__":
     stre = SteeringEng()
-    stre.rotate(180)
+    stre.rotate(90)
     stre.cleanup()
 

@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from car import Car
+from utils.car import Car
 
 app = Flask(__name__)
 

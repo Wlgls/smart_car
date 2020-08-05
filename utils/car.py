@@ -10,7 +10,7 @@
 说明:
 一个L298N控制4个直流电机，即同侧并联
 其中ENA和IN1和IN2控制A一侧(右侧)，ENAB和IN3和IN4控制B一侧(左侧)
-暂未实现调速
+暂未实现调速 PWM无法调速。。。可能有点问题
 基于不同的连线，函数可能发生变换，如前进变为后退等
 具体连线为（BCM）:
 ENA:GPIO-13
@@ -44,13 +44,29 @@ class Car(object):
         GPIO.setup(self.IN3, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN4, GPIO.OUT, initial=GPIO.LOW)
 
+        # self.PWMA = GPIO.PWM(self.ENA, 50)
+        # self.PWMB = GPIO.PWM(self.ENB, 50)
+        # self.PWMA.start(0)
+        # self.PWMB.start(0)
+        # self.speed = speed# 占空比
+
+    """ def changeSpeed(self, speed):
+        # 更改速度
+        self.speed = speed
+        self.PWMA.ChangeDutyCycle(speed)
+        self.PWMB.ChangeDutyCycle(speed) """
+
     def _reset(self):
         """初始化小车，用于复位和停止运行
         """
         GPIO.output(self.ENA, GPIO.LOW)
+        # self.PWMA.stop()
+        # self.PWMA.ChangeDutyCycle(0)
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.LOW)
         GPIO.output(self.ENB, GPIO.LOW)
+        # self.PWMB.stop()
+        # self.PWMB.ChangeDutyCycle(0)
         GPIO.output(self.IN3, GPIO.LOW)
         GPIO.output(self.IN4, GPIO.LOW)
     
@@ -58,6 +74,9 @@ class Car(object):
         """左侧齿轮向前
         """
         GPIO.output(self.ENA, GPIO.HIGH)
+        # self.PWMA.start(self.speed)
+        # print(self.speed)
+        # self.PWMA.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.HIGH)
 
@@ -65,6 +84,8 @@ class Car(object):
         """由测齿轮向前
         """
         GPIO.output(self.ENB, GPIO.HIGH)
+        # self.PWMB.start(self.speed)
+        # self.PWMB.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3, GPIO.LOW)
         GPIO.output(self.IN4, GPIO.HIGH)
     
@@ -72,13 +93,18 @@ class Car(object):
         """左侧齿轮向后
         """
         GPIO.output(self.ENA, GPIO.HIGH)
+        # self.PWMA.start(self.speed)
+        # print(self.speed)
+        # self.PWMA.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1, GPIO.HIGH)
         GPIO.output(self.IN2, GPIO.LOW)
     
     def _right_back(self):
         """右侧齿轮向后
         """
+        # self.PWMB.start(self.speed)
         GPIO.output(self.ENB, GPIO.HIGH)
+        # self.PWMB.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3, GPIO.HIGH)
         GPIO.output(self.IN4, GPIO.LOW)
 
@@ -114,6 +140,8 @@ class Car(object):
 
     def stop(self):
         self._reset()
+        """ self.PWMB.stop()
+        self.PWMA.stop() """
 
     def turn_left_back(self):
         """左后
@@ -132,7 +160,14 @@ class Car(object):
 
 if __name__ =="__main__":
     car = Car()
-    car.back()
+    car.forward()
+    time.sleep(2)
+    # car.stop()
+    # time.sleep(2)
+    car.stop()
+    time.sleep(1)
+    # car.changeSpeed(100)
+    car.forward()
     time.sleep(2)
     car.stop()
     
