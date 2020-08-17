@@ -30,41 +30,43 @@ GPIO.setmode(GPIO.BCM)
 
 class Car(object):
 
-    def __init__(self):
+    def __init__(self, speed=60):
         self.ENA=13
         self.IN1=19
         self.IN2=26
         self.ENB=21
         self.IN3=16
         self.IN4=20
-        GPIO.setup(self.ENA, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(self.ENA, GPIO.OUT)
         GPIO.setup(self.IN1, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN2, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(self.ENB, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(self.ENB, GPIO.OUT)
         GPIO.setup(self.IN3, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN4, GPIO.OUT, initial=GPIO.LOW)
 
-        # self.PWMA = GPIO.PWM(self.ENA, 50)
-        # self.PWMB = GPIO.PWM(self.ENB, 50)
-        # self.PWMA.start(0)
-        # self.PWMB.start(0)
-        # self.speed = speed# 占空比
+        self.PWMA = GPIO.PWM(self.ENA, 100)
+        self.PWMB = GPIO.PWM(self.ENB, 100)
+        self.PWMA.start(speed)
+        self.PWMB.start(speed)
+        self.speed = speed# 占空比
 
-    """ def changeSpeed(self, speed):
+    def changeSpeed(self, speed):
         # 更改速度
         self.speed = speed
         self.PWMA.ChangeDutyCycle(speed)
-        self.PWMB.ChangeDutyCycle(speed) """
+        self.PWMB.ChangeDutyCycle(speed) 
 
     def _reset(self):
         """初始化小车，用于复位和停止运行
         """
-        GPIO.output(self.ENA, GPIO.LOW)
+        # self.PWMB.stop()
+        # self.PWMB.stop()
+        # GPIO.output(self.ENA, GPIO.LOW)
         # self.PWMA.stop()
         # self.PWMA.ChangeDutyCycle(0)
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.LOW)
-        GPIO.output(self.ENB, GPIO.LOW)
+        # GPIO.output(self.ENB, GPIO.LOW)
         # self.PWMB.stop()
         # self.PWMB.ChangeDutyCycle(0)
         GPIO.output(self.IN3, GPIO.LOW)
@@ -73,40 +75,44 @@ class Car(object):
     def _left_forward(self):
         """左侧齿轮向前
         """
-        GPIO.output(self.ENA, GPIO.HIGH)
+        # GPIO.output(self.ENA, GPIO.HIGH)
         # self.PWMA.start(self.speed)
         # print(self.speed)
         # self.PWMA.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.HIGH)
+        # self.PWMA.start(self.speed)
 
     def _right_forward(self):
         """由测齿轮向前
         """
-        GPIO.output(self.ENB, GPIO.HIGH)
+        #GPIO.output(self.ENB, GPIO.HIGH)
         # self.PWMB.start(self.speed)
         # self.PWMB.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3, GPIO.LOW)
         GPIO.output(self.IN4, GPIO.HIGH)
+        # self.PWMB.start(self.speed)
     
     def _left_back(self):
         """左侧齿轮向后
         """
-        GPIO.output(self.ENA, GPIO.HIGH)
+        # GPIO.output(self.ENA, GPIO.HIGH)
         # self.PWMA.start(self.speed)
         # print(self.speed)
         # self.PWMA.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1, GPIO.HIGH)
         GPIO.output(self.IN2, GPIO.LOW)
+        # self.PWMA.start(self.speed)
     
     def _right_back(self):
         """右侧齿轮向后
         """
         # self.PWMB.start(self.speed)
-        GPIO.output(self.ENB, GPIO.HIGH)
+        # GPIO.output(self.ENB, GPIO.HIGH)
         # self.PWMB.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3, GPIO.HIGH)
         GPIO.output(self.IN4, GPIO.LOW)
+        # self.PWMB.start(self.speed)
 
     def forward(self):
         """前进
@@ -159,17 +165,13 @@ class Car(object):
         self._reset()
 
 if __name__ =="__main__":
-    car = Car()
-    car.forward()
+    car = Car(40)
+    car._left_forward()
     time.sleep(2)
     # car.stop()
     # time.sleep(2)
     car.stop()
-    time.sleep(1)
-    # car.changeSpeed(100)
-    car.forward()
-    time.sleep(2)
-    car.stop()
+    
     
     
         

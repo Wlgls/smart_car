@@ -13,6 +13,7 @@
 三引脚，其中vcc接L298N的5V输出，gnd接L298N的地
 右侧红外output:GPIO-10
 左侧红外output:GPIO-9
+有障碍时输入为0， 返回为True
 '''
 
 import RPi.GPIO as GPIO
@@ -31,8 +32,8 @@ class Infrared(object):
     def obstacle_measure(self):
         """检查是否有障碍物
         """
-        left_measure = GPIO.input(self.left_infrared)
-        right_measure = GPIO.input(self.right_infrared)
+        left_measure = False if GPIO.input(self.left_infrared) else True
+        right_measure = False if GPIO.input(self.right_infrared) else True
         return {"left":left_measure, "right":right_measure}
 
 if __name__ == "__main__":
