@@ -32,7 +32,7 @@
 <div id="container" class="container">
     
     <div>
-        <button id="front" class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-up"></button>
+        <button id="front" onclick="$.post('/cmd', this.id)" class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-up"></button>
     </div>
     <div>
  
@@ -46,7 +46,7 @@
      <div>
         <button id='leftRear' class="btn btn-lg btn-primary glyphicon">左后转</button>
         <button id='rightRear' class="btn btn-lg btn-primary glyphicon">右后转</button>
-    <div>
+    </div>
 </div>
  
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

@@ -45,14 +45,14 @@ class Ultrasound(object):
             pass
         t2 = time.time()
         dist = (t2-t1) * 340*100/2
-
-        # GPIO.cleanup()
         return round(dist, 2)
 
 if __name__ == "__main__":
-    U = Ultrasound()
-    print("{:.2f}cm".format(U.compute_dist()))
-    
+    try:
+        U = Ultrasound()
+        print("{:.2f}cm".format(U.compute_dist()))
+    except KeyboardInterrupt:
+        GPIO.cleanup() 
 
         
         

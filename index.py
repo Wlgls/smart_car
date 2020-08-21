@@ -1,7 +1,6 @@
-from flask import Flask, request, render_template
-from utils.car import Car
+from bottle import get,post,run,request,template
 
-app = Flask(__name__)
+from utils.Car import Car
 
 car = Car()
 
@@ -22,14 +21,14 @@ def main(status):
     elif status == "stop":
         car.stop()
 
-@app.route("/")
+@get("/")
 def index():
-    return render_template("index.html")
+    return template("templates/index")
 
-@app.route("/cmd", methods=["GET", "POST"])
+@post("/cmd")
 def cmd():
-    addss = request.get_data()
-    print(addss.decode())
-    main(addss.decode())
-    return "Ok"
-app.run(host="0.0.0.0")
+    status = request.body.read().decode()
+    print("按下了按钮: "+request.body.read().decode())
+    main(status)
+    #return "OK"
+run(host="0.0.0.0",port="8080")

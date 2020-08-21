@@ -107,20 +107,22 @@ class Car(object):
         self._right_back()
         self._left_back()
     
-    def turn_left(self):
+    def turn_left(self, angle=45):
         """左转
         """
+        t = 1/90 * angle
         self._reset()
         self._right_forward()
-        time.sleep(1)
+        time.sleep(t)
         self._reset()
     
-    def turn_right(self):
+    def turn_right(self, angle=45):
         """右转
         """
+        t = 1/90 * angle
         self._reset()
         self._left_forward()
-        time.sleep(1)
+        time.sleep(t)
         self._reset()
 
     def stop(self):
@@ -144,8 +146,8 @@ class Car(object):
         self._reset()
 
 if __name__ =="__main__":
-    car = Car(40)
-    car._left_forward()
+    car = Car(25)
+    car.forward()
     time.sleep(2)
     # car.stop()
     # time.sleep(2)

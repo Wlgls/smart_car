@@ -5,7 +5,7 @@
 @Time			:2020/08/16 22:47:33
 @Author			:wlgls
 @Version		:1.0
-@Abstract       :
+@Abstract       :           
 '''
 
 '''
@@ -14,51 +14,53 @@
 '''
 
 import RPi.GPIO as GPIO
-import Car, Ultrasound, Infrared
+from Car import Car
+from Ultrasound import Ultrasound
+from Infrared import Infrared
 import time
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
+class CarMove(Car, Ultrasound, Infrared):
+    def __init__(self):
+        Car.__init__(self)
+        Ultrasound.__init__(self)  
+        Infrared.__init__(self)
+    
+    def Astop(self):
+        Car.stop(self)
+        GPIO.cleanup()
+
 def main():
-    Cr = Car.Car()
-    Usd = Ultrasound.Ultrasound()
-    Ird = Infrared.Infrared()
-
-    Cr.forward()
-
-    safedist = 40
     try:
+        Cr = CarMove()
+        start_time = None
         while True:
-            time.sleep(1)
-            Cr.stop()
-            dist = Usd.compute_dist()
-            left, right = Ird.obstacle_measure().values()
+            time.sleep(2)
+            dist = Cr.compute_dist()
             print(dist)
+            left, right = Cr.obstacle_measure().values()
             print(left, right)
-            if dist < safedist:
-                if not left and not right:
-                    # Cr.back()
-                    Cr.turn_right()
+            left = False
+            if start_time is None or time.time()-start_time > 0.5:
+                start_time = None
                 if left and not right:
-                    print("turn_right")
+                    print("right")
                     Cr.turn_right()
-                if not left and right:
-                    print("turn_left")
+                elif not left and right:
+                    print("left")
                     Cr.turn_left()
-                if left and right:
+                elif left and right:
                     print("back")
                     Cr.back()
-                    if left and not right:
-                        time.sleep(1)
-                        print("turn_right")
+                else:
+                    if dist < 20:
                         Cr.turn_right()
-                    if not left and right:
-                        time.sleep(1)
-                        print("turn_left")
-                        Cr.turn_left()
-            else:
-                print("forward")
-                Cr.forward()
+                        start_time = time.time()
+                    else:
+                        print("forward")
+                        Cr.forward()
+
     except KeyboardInterrupt:
         Cr.stop()
         GPIO.cleanup()

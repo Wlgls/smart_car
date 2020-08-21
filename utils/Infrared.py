@@ -24,8 +24,8 @@ GPIO.setwarnings(False)
 
 class Infrared(object):
     def __init__(self):
-        self.left_infrared = 9
-        self.right_infrared = 10
+        self.left_infrared = 10
+        self.right_infrared = 9
         GPIO.setup(self.right_infrared, GPIO.IN)
         GPIO.setup(self.left_infrared, GPIO.IN)
     
@@ -38,4 +38,5 @@ class Infrared(object):
 
 if __name__ == "__main__":
     infrared = Infrared()
-    print(infrared.obstacle_measure())
+    while True:
+        print(infrared.obstacle_measure())
