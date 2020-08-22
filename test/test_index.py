@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
-from utils.Car import Car
+from car import Car
+from utils.car import Car
 
 app = Flask(__name__)
 
@@ -20,14 +21,13 @@ def main(status):
         car.turn_right_back()
     elif status == "stop":
         car.stop()
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
 @app.route("/cmd", methods=["GET", "POST"])
 def cmd():
     addss = request.get_data()
+    print(addss.decode())
     main(addss.decode())
     return "Ok"
 app.run(host="0.0.0.0")
