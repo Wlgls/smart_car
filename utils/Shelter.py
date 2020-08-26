@@ -23,7 +23,7 @@ GPIO.setmode(GPIO.BCM)
 
 class CarMove(Car, Ultrasound, Infrared):
     def __init__(self):
-        Car.__init__(self)
+        Car.__init__(self, 100)
         Ultrasound.__init__(self)  
         Infrared.__init__(self)
     
@@ -36,12 +36,10 @@ def main():
         Cr = CarMove()
         start_time = None
         while True:
-            time.sleep(2)
             dist = Cr.compute_dist()
             print(dist)
             left, right = Cr.obstacle_measure().values()
             print(left, right)
-            left = False
             if start_time is None or time.time()-start_time > 0.5:
                 start_time = None
                 if left and not right:
@@ -55,6 +53,7 @@ def main():
                     Cr.back()
                 else:
                     if dist < 20:
+                        print("right")
                         Cr.turn_right()
                         start_time = time.time()
                     else:

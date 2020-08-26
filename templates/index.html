@@ -18,6 +18,12 @@
         .btn{
              background: #62559f;
             }
+	.stream{
+             background: blue;
+	     color: yellow;
+	     padding: 1%;
+	     text-align:center;
+	}
     </style>
     <script>
         $(function(){
@@ -29,6 +35,9 @@
     </script>
 </head>
 <body>
+<div>
+	<h3 id="stream"><img src="{{ url_for('video_feed' )}}" width="50%", height="50%"></h3>
+</div>
 <div id="container" class="container">
     
     <div>

@@ -30,7 +30,7 @@ GPIO.setmode(GPIO.BCM)
 
 class Car(object):
 
-    def __init__(self, speed=60):
+    def __init__(self, speed=80):
         self.ENA=13
         self.IN1=19
         self.IN2=26
@@ -44,8 +44,8 @@ class Car(object):
         GPIO.setup(self.IN3, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.IN4, GPIO.OUT, initial=GPIO.LOW)
 
-        self.PWMA = GPIO.PWM(self.ENA, 100)
-        self.PWMB = GPIO.PWM(self.ENB, 100)
+        self.PWMA = GPIO.PWM(self.ENA, 500)
+        self.PWMB = GPIO.PWM(self.ENB, 500)
         self.PWMA.start(speed)
         self.PWMB.start(speed)
         self.speed = speed# 占空比
@@ -73,7 +73,7 @@ class Car(object):
         GPIO.output(self.IN2, GPIO.HIGH)
 
     def _right_forward(self):
-        """由测齿轮向前
+        """右侧齿轮向前
         """
 
         GPIO.output(self.IN3, GPIO.LOW)
@@ -144,9 +144,13 @@ class Car(object):
         self._left_back()
         time.sleep(1)
         self._reset()
+    def allstop(self):
+        self._reset()
+        self.PWMA.stop()
+        self.PWMB.stop()
 
 if __name__ =="__main__":
-    car = Car(25)
+    car = Car()
     car.forward()
     time.sleep(2)
     # car.stop()

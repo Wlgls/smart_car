@@ -1,3 +1,4 @@
+#-*- coding:UTF-8 -*-
 import time
 import numpy as np
 import cv2
@@ -12,7 +13,7 @@ class CarCamera(object):
     def __init__(self):
         # initialize the camera and grab a reference to the raw camera capture
 
-        HOST = '192.168.12.90'  # ip of PC
+        HOST = '192.168.1.100'  # ip of PC
         PORT = 8000  # 随便设置一个，对应起来就行
         self.server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.server.connect((HOST,PORT))
@@ -59,3 +60,4 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         car.CameraCleanup()
+
