@@ -21,18 +21,19 @@ class Camera(object):
     frame = None  # current frame is stored here by background thread
     last_access = 0  # time of last client access to the camera
     def __init__(self, tennis_detect=False):
+        
         self.tennis_detect = tennis_detect
         self.lower = np.array([35, 130, 80])
         self.higher = np.array([50, 170, 140])
 
     def initialize(self):
-        if Camera.thread is None:
+        if cls.thread is None:
             # start background frame thread
-            Camera.thread = threading.Thread(target=self._thread)
-            Camera.thread.start()
+            cls.thread = threading.Thread(target=self._thread)
+            cls.thread.start()
 
             # wait until frames start to be available
-            while self.frame is None:
+            while cls.frame is None:
                 time.sleep(0)
                 
     def transform(self, frame):
@@ -43,14 +44,14 @@ class Camera(object):
         return imagecode, message
 
     def tennis_detecter(self, frame):
-        print("1")
+        # print("1")
         img = copy.copy(frame)
         img = cv2.GaussianBlur(img, (5, 5), 5)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         edge = cv2.Canny(gray_img, 5, 5)
         circles = cv2.HoughCircles(edge, cv2.HOUGH_GRADIENT, 1, 60, param1=100, param2=20, minRadius=100, maxRadius=400)
-        print(circles)
+        # print(circles)
         if circles is not None:
             x = circles[0][:, 0].astype(int)
             y = circles[0][:, 1].astype(int)
