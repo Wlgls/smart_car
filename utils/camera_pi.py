@@ -27,13 +27,14 @@ class Camera(object):
         self.higher = np.array([50, 170, 140])
 
     def initialize(self):
-        if cls.thread is None:
+        if Camera.thread is None:
             # start background frame thread
-            cls.thread = threading.Thread(target=self._thread)
-            cls.thread.start()
+            print("new thread")
+            Camera.thread = threading.Thread(target=self._thread)
+            Camera.thread.start()
 
             # wait until frames start to be available
-            while cls.frame is None:
+            while Camera.frame is None:
                 time.sleep(0)
                 
     def transform(self, frame):
@@ -110,6 +111,8 @@ class Camera(object):
 
 if __name__ == "__main__":
     c = Camera()
-    data = c.get_frame()
+    while True:
+        print(c.thread)
+        data = c.get_frame()
     # print(type(data))
     
