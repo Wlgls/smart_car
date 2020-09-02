@@ -83,8 +83,6 @@ if __name__ == '__main__':
 
                     car.VideoTransmission(frame)  # 向PC传输视频帧
                     video_out.write(frame)
-
-
                     rawCapture.truncate(0)  # PiCamera必备
 
                     mfps = 1 / (time.time() - t_start)  # 计算FPS

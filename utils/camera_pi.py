@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#  camera_pi.py
-#  
-#  
-#  
+# -*- encoding: utf-8 -*-
+'''
+@File			:camera_pi.py
+@Time			:2020/09/02 21:08:08
+@Author			:wlgls
+@Version		:1.0
+@Abstract       :照相机以及网球检测，但是网球检测似乎无法成功
+'''
 import time
 import io
 import threading
@@ -17,32 +19,32 @@ import copy
 
 
 class Camera(object):
-    thread = None  # background thread that reads frames from camera
-    frame = None  # current frame is stored here by background thread
-    last_access = 0  # time of last client access to the camera
+    
     def __init__(self, tennis_detect=False):
-        
         self.tennis_detect = tennis_detect
+        self.thread = None  # background thread that reads frames from camera
+        self.frame = None  # current frame is stored here by background thread
+        self.last_access = 0  # time of last client access to the camera
+        self.position = None
         self.lower = np.array([35, 130, 80])
         self.higher = np.array([50, 170, 140])
 
     def initialize(self):
-        if Camera.thread is None:
+        if self.thread is None:
             # start background frame thread
             print("new thread")
-            Camera.thread = threading.Thread(target=self._thread)
-            Camera.thread.start()
+            self.thread = threading.Thread(target=self._thread)
+            self.thread.start()
 
             # wait until frames start to be available
-            while Camera.frame is None:
+            while self.frame is None:
                 time.sleep(0)
                 
     def transform(self, frame):
-        message = None
         if self.tennis_detect:
-            frame, message = self.tennis_detecter(frame)
+            frame, self.position = self.tennis_detecter(frame)
         success, imagecode = cv2.imencode(".jpeg", frame)
-        return imagecode, message
+        return imagecode, self.position
 
     def tennis_detecter(self, frame):
         # print("1")
@@ -50,7 +52,7 @@ class Camera(object):
         img = cv2.GaussianBlur(img, (5, 5), 5)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        edge = cv2.Canny(gray_img, 5, 5)
+        edge = cv2.Canny(gray_img, 10, 30)
         circles = cv2.HoughCircles(edge, cv2.HOUGH_GRADIENT, 1, 60, param1=100, param2=20, minRadius=100, maxRadius=400)
         # print(circles)
         if circles is not None:
@@ -82,12 +84,11 @@ class Camera(object):
         
     def get_frame(self):
         # 返回array数组
-        Camera.last_access = time.time()
+        self.last_access = time.time()
         self.initialize()
         return self.transform(self.frame)
 
-    @classmethod
-    def _thread(cls):
+    def _thread(self):
         with picamera.PiCamera() as camera:
             # camera setup
             camera.resolution = (320, 240)
@@ -102,17 +103,17 @@ class Camera(object):
             stream = PiRGBArray(camera)
             for foo in camera.capture_continuous(stream, 'bgr',
                                                  use_video_port=True):
-                cls.frame = stream.array
+                self.frame = stream.array
                 stream.truncate(0)
-                if time.time() - cls.last_access > 10:
+                if time.time() - self.last_access > 10:
                     break
             
-        cls.thread = None
+        self.thread = None
 
 if __name__ == "__main__":
     c = Camera()
     while True:
-        print(c.thread)
+        # print(c.thread)
         data = c.get_frame()
     # print(type(data))
     
