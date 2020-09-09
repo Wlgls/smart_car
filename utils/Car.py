@@ -125,7 +125,7 @@ class Car(object):
         time.sleep(t)
         self._reset()
 
-    def stop(self):
+    def stopcar(self):
         self._reset()
         """ self.PWMB.stop()
         self.PWMA.stop() """

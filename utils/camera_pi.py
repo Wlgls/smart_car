@@ -21,6 +21,7 @@ import copy
 class Camera(object):
     
     def __init__(self, tennis_detect=False):
+        self.count = 0
         self.tennis_detect = tennis_detect
         self.thread = None  # background thread that reads frames from camera
         self.frame = None  # current frame is stored here by background thread
@@ -92,7 +93,7 @@ class Camera(object):
     def _thread(self):
         with picamera.PiCamera() as camera:
             # camera setup
-            camera.resolution = (320, 240)
+            camera.resolution = (1920, 1080)
             camera.rotation = 180
             camera.hflip = True
             camera.vflip = True
@@ -109,7 +110,12 @@ class Camera(object):
                 if time.time() - self.last_access > 10:
                     break
             
-        self.thread = None
+        self.thread = None 
+
+    def saveimg(self, frame):
+        path = '/home/pi/img/'
+        cv2.imwrite(path+'img{}.jpg'.format(self.count), frame)
+        self.count+=1
 
 if __name__ == "__main__":
     c = Camera()

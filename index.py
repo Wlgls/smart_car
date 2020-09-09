@@ -32,40 +32,40 @@ class CMove(Car, Ultrasound, Infrared):
     def _Shrthread(self):
         start_time = None
         while self.flag:
-            dist = Ultrasound.compute_dist()
+            dist = self.compute_dist()
             print(dist)
-            left, right = Infrared.obstacle_measure().values()
+            left, right = self.obstacle_measure().values()
             print(left, right)
             if start_time is None or time.time()-start_time > 0.5:
                 start_time = None
                 if left and not right:
                     print("right")
-                    Car.turn_right()
+                    self.turn_right()
                 elif not left and right:
                     print("left")
-                    Car.turn_left()
+                    self.turn_left()
                 elif left and right:
                     print("back")
-                    Car.back()
+                    self.back()
                 else:
                     if dist < 20:
                         print("right")
-                        Car.turn_right()
+                        self.turn_right()
                         start_time = time.time()
                     else:
                         print("forward")
-                        Car.forward()
+                        self.forward()
         print("thread stop")
     
     def setflag(self, flag=False):
         self.flag = flag
         self.ShrThread = None
-        Car.stop()
+        self.stopcar()
         time.sleep(2)
 
     def AllStop(self):
-        Car.stop(self)
-        Shelter.setflag(False)
+        self.stopcar(self)
+        self.setflag(False)
         GPIO.cleanup()
 
 CMove = CMove()
@@ -73,7 +73,7 @@ CMove = CMove()
 
 def main(status):
     print(status)
-    if status != 'shelter' or status != 'stopshelter':
+    if status != 'shelter' and status != 'stopshelter':
         if status == "front":
             CMove.forward()
         elif status == "leftFront":
@@ -87,10 +87,10 @@ def main(status):
         elif status == "rightRear":
             CMove.turn_right_back()
         elif status == "stop":
-            CMove.stop()
+            CMove.stopcar()
     else:
         if status == 'shelter':
-            CMove.Str()
+            CMove.startShelter()
         else:
             CMove.setflag(False)
 
@@ -107,7 +107,7 @@ def gen(camera):
 
 @app.route("/video_feed")
 def video_feed():
-    return Response(gen(Cam), 
+    return Response(gen(CMove), 
             mimetype="multipart/x-mixed-replace;boundary=frame")
             
 
