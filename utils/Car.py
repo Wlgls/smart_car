@@ -48,7 +48,7 @@ class Car(object):
         self.PWMB = GPIO.PWM(self.ENB, 500)
         self.PWMA.start(speed)
         self.PWMB.start(speed)
-        self.speed = speed# 占空比
+        self.speed = speed# 占空比 
 
     def changeSpeed(self, speed):
         # 更改速度
@@ -144,18 +144,18 @@ class Car(object):
         self._left_back()
         time.sleep(1)
         self._reset()
-    def allstop(self):
+    def stopcar(self):
         self._reset()
         self.PWMA.stop()
         self.PWMB.stop()
 
 if __name__ =="__main__":
     car = Car()
-    car.forward()
-    time.sleep(2)
+    # car.forward()
+    # time.sleep(2)
     # car.stop()
     # time.sleep(2)
-    car.stop()
+    car.stopcar()
     
     
     

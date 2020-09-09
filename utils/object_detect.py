@@ -30,8 +30,8 @@ class object_Detect(object):
         self.last_access = 0
 
         # 将视频存在本地
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        self.video_out = cv2.VideoWriter('out.mp4', fourcc, 2, (640, 480))
+        """ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        self.video_out = cv2.VideoWriter('out.mp4', fourcc, 2, (640, 480)) """
 
         # 模型配置
         print("loding--")
@@ -147,15 +147,15 @@ class object_Detect(object):
                             use_normalized_coordinates=True,
                             line_thickness=8
                         )
-                        self.video_out.write(frame)
+                        # self.video_out.write(frame)
                         self.frame = frame
                         stream.truncate(0)
                         mfpf = 1 /(time.time()-t_start)
                         # print(mfpf)
                         # time.sleep(2)
-                        print(time.time())
-                        print(self.last_access)
-                        if time.time() - self.last_access > 200:
+                        # print(time.time())
+                        # print(self.last_access)
+                        if time.time() - self.last_access > 10:
                             break 
         self.Thread = None
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         od.get_frame()
         print(od.Thread)
         time.sleep(2)
-        od.get_frame()
+        # od.get_frame()
         print("object")
 
 

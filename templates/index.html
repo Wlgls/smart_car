@@ -28,6 +28,7 @@
     <script>
         $(function(){
             $("button").click(function(){
+                window.alert("asdf")
                 $.post("/cmd",this.id,function(data,status){});
             });
         });
@@ -41,7 +42,7 @@
 <div id="container" class="container">
     
     <div>
-        <button id="front" onclick="$.post('/cmd', this.id)" class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-up"></button>
+        <button id="front"  class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-up"></button>
     </div>
     <div>
  
@@ -55,6 +56,10 @@
      <div>
         <button id='leftRear' class="btn btn-lg btn-primary glyphicon">左后转</button>
         <button id='rightRear' class="btn btn-lg btn-primary glyphicon">右后转</button>
+    </div>
+    <div>
+        <button id='shelter' class="btn btn-lg btn-primary glyphicon">自动蔽障</button>
+        <button id='stopshelter' class="btn btn-lg btn-primary glyphicon">停止</button>
     </div>
 </div>
  

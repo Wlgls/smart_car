@@ -29,11 +29,12 @@ class Camera(object):
         self.lower = np.array([35, 130, 80])
         self.higher = np.array([50, 170, 140])
 
-    def initialize(self):
+    def runcamera(self):
         if self.thread is None:
             # start background frame thread
             print("new thread")
             self.thread = threading.Thread(target=self._thread)
+            self.thread.setDaemon(True)
             self.thread.start()
 
             # wait until frames start to be available
