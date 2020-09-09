@@ -87,13 +87,13 @@ class Camera(object):
     def get_frame(self):
         # 返回array数组
         self.last_access = time.time()
-        self.initialize()
+        self.runcamera()
         return self.transform(self.frame)
 
     def _thread(self):
         with picamera.PiCamera() as camera:
             # camera setup
-            camera.resolution = (1920, 1080)
+            camera.resolution = (1280, 720)
             camera.rotation = 180
             camera.hflip = True
             camera.vflip = True
@@ -106,6 +106,7 @@ class Camera(object):
             for foo in camera.capture_continuous(stream, 'bgr',
                                                  use_video_port=True):
                 self.frame = stream.array
+                # self.saveimg(frame)
                 stream.truncate(0)
                 if time.time() - self.last_access > 10:
                     break

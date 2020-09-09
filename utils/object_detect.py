@@ -31,7 +31,7 @@ class object_Detect(object):
 
         # 将视频存在本地
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        self.video_out = cv2.VideoWriter('out.mp4', fourcc, 2, (1920, 1080))
+        self.video_out = cv2.VideoWriter('out.mp4', fourcc, 2, (1280, 720))
 
         # 模型配置
         print("loding--")
@@ -116,7 +116,7 @@ class object_Detect(object):
             with tf.compat.v1.Session(graph=self.detection_graph) as sess:
                 with PiCamera() as camera:
                     # camera setup
-                    camera.resolution = (1920, 1080)
+                    camera.resolution = (1280, 720)
                     camera.rotation = 180
                     camera.hflip = True
                     camera.vflip = True

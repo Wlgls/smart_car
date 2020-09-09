@@ -10,15 +10,17 @@ from utils.Ultrasound import Ultrasound
 from utils.Infrared import Infrared
 # from utils import object_detect
 import RPi.GPIO as GPIO
+import time
 
 app = Flask(__name__)
 GPIO.setmode(GPIO.BCM)
 
-class CMove(Car, Ultrasound, Infrared):
+class CMove(Car, Ultrasound, Infrared, Camera):
     def __init__(self):
-        Car.__init__(self)
+        Car.__init__(self, 80)
         Ultrasound.__init__(self)
         Infrared.__init__(self)
+        Camera.__init__(self)
         self.ShrThread = None
         self.flag = False
 
@@ -60,7 +62,7 @@ class CMove(Car, Ultrasound, Infrared):
     def setflag(self, flag=False):
         self.flag = flag
         self.ShrThread = None
-        self.stopcar()
+        self.stop()
         time.sleep(2)
 
     def AllStop(self):
@@ -74,6 +76,8 @@ CMove = CMove()
 def main(status):
     print(status)
     if status != 'shelter' and status != 'stopshelter':
+        if CMove.flag:
+            CMove.setflag()
         if status == "front":
             CMove.forward()
         elif status == "leftFront":
@@ -87,8 +91,9 @@ def main(status):
         elif status == "rightRear":
             CMove.turn_right_back()
         elif status == "stop":
-            CMove.stopcar()
+            CMove.stop()
     else:
+        print("test")
         if status == 'shelter':
             CMove.startShelter()
         else:
@@ -113,13 +118,11 @@ def video_feed():
 
 @app.route("/cmd", methods=["GET", "POST"])
 def cmd():
-    print('asdf')
     addss = request.get_data()
-    print(addss.decode())
+    #print(addss.decode())
     main(addss.decode())
     return "Ok"
 try:
     app.run(host="0.0.0.0")
 except KeyboardInterrupt:
-    CMove.stopcar()
     CMove.AllStop()
