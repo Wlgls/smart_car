@@ -142,9 +142,9 @@ class Camera(object):
                     # self.VideoTransmission(np.copy(foo.array))
                     self.frame = frame
                     self.pos = postision
-                
-                    time.sleep(2)
-                    self.controlcar(*postision)
+                    if postision:
+                        time.sleep(2)
+                        self.controlcar(*postision)
                 else:
                     self.frame = foo.array
                 # self.saveimg(frame)
