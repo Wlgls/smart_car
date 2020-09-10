@@ -17,10 +17,10 @@ GPIO.setmode(GPIO.BCM)
 
 class CMove(Car, Ultrasound, Infrared, Camera):
     def __init__(self):
-        Car.__init__(self, 80)
+        # Car.__init__(self, 80)
         Ultrasound.__init__(self)
         Infrared.__init__(self)
-        Camera.__init__(self)
+        Camera.__init__(self, tennis_detect=False)
         self.ShrThread = None
         self.flag = False
 
@@ -71,7 +71,6 @@ class CMove(Car, Ultrasound, Infrared, Camera):
         GPIO.cleanup()
 
 CMove = CMove()
-
 
 def main(status):
     print(status)
