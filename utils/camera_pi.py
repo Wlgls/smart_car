@@ -34,7 +34,7 @@ class Camera(object):
 
 
         self.status = None
-        self.tennisrun = True
+        self.tennisrun = False
 
         # 控制小车
         self.center_x = 1280/2
@@ -51,15 +51,10 @@ class Camera(object):
         self.server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.server.connect((HOST,PORT))
 
-        self.car = Car()
-
-    def getstatus(self):
-        return self.status
 
     def settennisrun(self, flag=False):
         self.tennisrun = flag
-        if self.car is None:
-            self.car = Car()
+        time.sleep(1)
         
     def runcamera(self):
         if self.thread is None:
@@ -138,22 +133,21 @@ class Camera(object):
             stream = PiRGBArray(camera)
             for foo in camera.capture_continuous(stream, 'bgr',
                                                  use_video_port=True):
+                if self.tennisrun:
+                    # self.frame = stream.array
+                    # print("start detect")
+                    frame, postision = self.tennis_detecter(foo.array)
+                    # print("end detect")
+                    # print(frame.shape)
+                    # self.VideoTransmission(np.copy(foo.array))
+                    self.frame = frame
+                    self.pos = postision
                 
-                # self.frame = stream.array
-                # self.saveimg(frame)
-                # print(foo)
-                # print("start detect")
-                frame, postision = self.tennis_detecter(foo.array)
-                # print("end detect")
-                # print(frame.shape)
-                # self.frame = stream.array
-                # self.VideoTransmission(np.copy(foo.array))
-                self.frame = frame
-                self.pos = postision
-                if self.tennisrun and postision:
                     time.sleep(2)
                     self.controlcar(*postision)
-                    
+                else:
+                    self.frame = foo.array
+                # self.saveimg(frame)
 
                 stream.truncate(0)
                 #print(stream)
@@ -171,20 +165,20 @@ class Camera(object):
 
         if posr - self.center_r > self.limit_r:
             print('back')
-            self.car.back()
+            self.back()
             time.sleep(0.2)
-            self.car.stop()
+            self.stop()
         elif self.center_r - posr > self.limit_r:
             print('forward')
-            self.car.forward()
+            self.forward()
             time.sleep(0.2)
-            self.car.stop()
+            self.stop()
         if posx - self.center_x > self.limit_x:
             print('turnr')
-            self.car.turn_right(25)
+            self.turn_right(25)
         elif self.center_x - posx > self.limit_x:
             print('turnl')
-            self.car.turn_left(25)
+            self.turn_left(25)
 
         return None
 

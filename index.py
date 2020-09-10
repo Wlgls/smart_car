@@ -17,9 +17,10 @@ GPIO.setmode(GPIO.BCM)
 
 class CMove(Car, Ultrasound, Infrared, Camera):
     def __init__(self):
-        # Car.__init__(self, 80)
+        Car.__init__(self, 80)
         Ultrasound.__init__(self)
         Infrared.__init__(self)
+        print(Car)
         Camera.__init__(self, tennis_detect=False)
         self.ShrThread = None
         self.flag = False
@@ -74,9 +75,11 @@ CMove = CMove()
 
 def main(status):
     print(status)
-    if status != 'shelter' and status != 'stopshelter':
+    if status != 'shelter' and status != 'stopshelter' and status!='tennis':
         if CMove.flag:
             CMove.setflag()
+        if CMove.tennisrun:
+            CMove.settennisrun(False)
         if status == "front":
             CMove.forward()
         elif status == "leftFront":
@@ -91,12 +94,16 @@ def main(status):
             CMove.turn_right_back()
         elif status == "stop":
             CMove.stop()
-    else:
+    elif status == 'shelter' or status == 'stopshelter':
         print("test")
+        if CMove.tennisrun:
+            CMove.settennisrun(False)
         if status == 'shelter':
             CMove.startShelter()
         else:
             CMove.setflag(False)
+    else:
+        CMove.settennisrun(True)
 
 @app.route("/")
 def index():
